@@ -1,0 +1,42 @@
+<div class="parent">
+  <div class="spacer">
+    {{#if shouldShowToggle}}
+      <span class="toggle {{toggleClass}}" {{action "toggleChanged" model}}>
+        {{#if isOpen}}
+          &#8863;
+        {{else}}
+          &#8862;
+        {{/if}}
+      </span>
+    {{/if}}
+  </div>
+
+  <div class="input spacer">
+    {{one-way-input
+      type=type
+      checked=isSelectedReadOnly
+      disabled=isDisabled
+      update=(action "selectionChanged" model)
+    }}
+  </div>
+
+  <span class="text">{{text}}</span>
+</div>
+
+{{#if isOpen}}
+  <div class="children">
+    <div class="spacer"></div>
+    <div>
+      {{#if children.isPending}}
+        <span class="loading">
+          <div class="spacer"></div>
+          {{_loadingText}}
+        </span>
+      {{else}}
+        {{#each children as |child|}}
+          {{yield child}}
+        {{/each}}
+      {{/if}}
+    </div>
+  </div>
+{{/if}}

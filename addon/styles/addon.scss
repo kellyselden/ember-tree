@@ -1,0 +1,25 @@
+.tree-node {
+  .parent, .children, .loading {
+    & > * {
+      display: inline-block;
+    }
+  }
+
+  .parent, .loading {
+    line-height: 1.75em;
+  }
+
+  .toggle {
+    cursor: pointer;
+  }
+
+  .input {
+    vertical-align: sub;
+  }
+
+  .spacer {
+    height: 1px;
+    width: 1.5em;
+    text-align: center;
+  }
+}
