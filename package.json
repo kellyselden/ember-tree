@@ -47,7 +47,7 @@
   ],
   "dependencies": {
     "ember-array-helper": "0.0.1",
-    "ember-awesome-macros": "0.0.1",
+    "ember-awesome-macros": "0.0.2",
     "ember-cli-babel": "^5.1.5",
     "ember-cli-htmlbars": "^1.0.0",
     "ember-cli-sass": "5.3.0",
