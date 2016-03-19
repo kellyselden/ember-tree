@@ -5,7 +5,8 @@ import promiseArray from 'ember-awesome-macros/promise-array';
 
 const {
   set,
-  RSVP: { defer }
+  RSVP: { defer },
+  A: newArray
 } = Ember;
 
 let deferred;
@@ -58,7 +59,7 @@ function renderDefault(shouldResolve = true) {
   `);
 
   if (shouldResolve) {
-    deferred.resolve(['test-child']);
+    deferred.resolve(newArray(['test-child']));
   }
 }
 
