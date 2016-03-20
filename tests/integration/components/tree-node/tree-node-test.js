@@ -1,67 +1,13 @@
 import Ember from 'ember';
-import { moduleForComponent, test } from 'ember-qunit';
+import { test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import promiseArray from 'ember-awesome-macros/promise-array';
+import { init, globals, renderDefault } from './tree-node';
 
 const {
-  set,
-  RSVP: { defer },
-  A: newArray
+  set
 } = Ember;
 
-let deferred;
-let wasChildrenCalled;
-
-moduleForComponent('tree-node', 'Integration | Component | tree node', {
-  integration: true,
-  beforeEach() {
-    deferred = defer();
-    wasChildrenCalled = false;
-
-    this.set('model', Ember.Object.extend({
-      text: 'test-text',
-      children: promiseArray(function() {
-        wasChildrenCalled = true;
-        return deferred.promise;
-      })
-    }).create());
-    this.set('loadingText', 'test-loading');
-
-    this.on('toggleChanged', (isOpen, model) => {
-      set(model, 'isOpen', isOpen);
-    });
-    this.on('opened', () => {});
-    this.on('closed', () => {});
-    this.on('selectionChanged', (isSelected, model) => {
-      set(model, 'isSelected', isSelected);
-    });
-    this.on('selected', () => {});
-    this.on('unselected', () => {});
-  }
-});
-
-function renderDefault(shouldResolve = true) {
-  this.render(hbs`
-    {{#tree-node
-      model
-      text=model.text
-      loadingText=loadingText
-      toggleChanged="toggleChanged"
-      opened="opened"
-      closed="closed"
-      selectionChanged="selectionChanged"
-      selected="selected"
-      unselected="unselected"
-      as |child|
-    }}
-      {{child}}
-    {{/tree-node}}
-  `);
-
-  if (shouldResolve) {
-    deferred.resolve(newArray(['test-child']));
-  }
-}
+init();
 
 test('shows text', function(assert) {
   assert.expect(1);
@@ -413,7 +359,7 @@ test('doesn\'t load children before toggle', function(assert) {
 
   renderDefault.call(this, false);
 
-  assert.notOk(wasChildrenCalled);
+  assert.notOk(globals.wasChildrenCalled);
 });
 
 test('preserves toggle open in children when parent closes', function(assert) {
@@ -443,42 +389,4 @@ test('preserves toggle open in children when parent closes', function(assert) {
   this.$('#parent .toggle:first').click();
 
   assert.strictEqual(this.$('#child .open').length, 1);
-});
-
-test('can start selected', function(assert) {
-  // assert.expect(2);
-
-  let child = Ember.Object.create({
-    isSelected: true
-  });
-  let parent = Ember.Object.create({
-    children: Ember.A([
-      child
-    ]),
-    isOpen: true,
-    isSelected: true
-  });
-
-  this.set('parent', parent);
-
-  this.render(hbs`
-    {{#tree-node
-      parent
-      id="parent"
-      selectionChanged="selectionChanged"
-      as |child|
-    }}
-      {{tree-node
-        child
-        id="child"
-      }}
-    {{/tree-node}}
-  `);
-
-  assert.ok(this.$('#parent input:first').prop('checked'));
-  assert.ok(this.$('#child input').prop('checked'));
-
-  this.$('#parent input:first').click();
-
-  assert.notOk(this.$('#parent input:first').prop('checked'));
 });
