@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 import { init, renderDefault } from './tree-node';
 
 const {
@@ -76,34 +75,11 @@ test('isSelected is false on second click', function(assert) {
 });
 
 test('can start selected', function(assert) {
-  // assert.expect(2);
+  assert.expect(1);
 
-  this.render(hbs`
-    {{#tree-node
-      (hash
-        children=(array
-          (hash
-            isSelected=true
-          )
-        )
-        isOpen=true
-        isSelected=true
-      )
-      id="parent"
-      selectionChanged="selectionChanged"
-      as |child|
-    }}
-      {{tree-node
-        child
-        id="child"
-      }}
-    {{/tree-node}}
-  `);
+  set(this, 'model.isSelected', true);
 
-  assert.ok(this.$('#parent input:first').prop('checked'));
-  assert.ok(this.$('#child input').prop('checked'));
+  renderDefault.call(this);
 
-  this.$('#parent input:first').click();
-
-  assert.notOk(this.$('#parent input:first').prop('checked'));
+  assert.ok(this.$('input').prop('checked'));
 });
