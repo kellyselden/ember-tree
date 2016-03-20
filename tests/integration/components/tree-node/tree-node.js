@@ -4,7 +4,7 @@ import hbs from 'htmlbars-inline-precompile';
 import promiseArray from 'ember-awesome-macros/promise-array';
 
 const {
-  set,
+  set, setProperties,
   RSVP: { defer },
   A: newArray
 } = Ember;
@@ -18,23 +18,29 @@ function init() {
     integration: true,
     beforeEach() {
       deferred = defer();
-      globals.wasChildrenCalled = false;
+      setProperties(globals, {
+        wasChildrenCalled: false,
+        wasToggleChangedCalled: false,
+        wasSelectionChangedCalled: false
+      });
 
       this.set('model', Ember.Object.extend({
         text: 'test-text',
         children: promiseArray(function() {
-          globals.wasChildrenCalled = true;
+          globals.wasToggleChangedCalled = true;
           return deferred.promise;
         })
       }).create());
       this.set('loadingText', 'test-loading');
 
       this.on('toggleChanged', (isOpen, model) => {
+        globals.wasChildrenCalled = true;
         set(model, 'isOpen', isOpen);
       });
       this.on('opened', () => {});
       this.on('closed', () => {});
       this.on('selectionChanged', (isSelected, model) => {
+        globals.wasSelectionChangedCalled = true;
         set(model, 'isSelected', isSelected);
       });
       this.on('selected', () => {});
