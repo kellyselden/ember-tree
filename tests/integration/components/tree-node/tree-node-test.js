@@ -190,24 +190,6 @@ test('sends model on unselected', function(assert) {
   this.$('input').click();
 });
 
-test('has toggle when branch node', function(assert) {
-  assert.expect(1);
-
-  renderDefault.call(this);
-
-  assert.strictEqual(this.$('.toggle').length, 1);
-});
-
-test('can hide toggle', function(assert) {
-  assert.expect(1);
-
-  set(this, 'model.shouldShowToggle', false);
-
-  renderDefault.call(this);
-
-  assert.strictEqual(this.$('.toggle').length, 0);
-});
-
 test('doesn\'t load children before toggle', function(assert) {
   assert.expect(1);
 
