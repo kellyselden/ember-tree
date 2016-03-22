@@ -1,0 +1,23 @@
+{{#each topModels as |topModel|}}
+  {{#tree-node
+    topModel
+    text=topModel.name
+    toggleChanged="topToggleChanged"
+    selectionChanged="topSelectionChanged"
+    as |middleModel|
+  }}
+    {{#tree-node
+      middleModel
+      text=middleModel.name
+      toggleChanged="middleToggleChanged"
+      selectionChanged="middleSelectionChanged"
+      as |bottomModel|
+    }}
+      {{tree-node
+        bottomModel
+        text=bottomModel.name
+        selectionChanged="bottomSelectionChanged"
+      }}
+    {{/tree-node}}
+  {{/tree-node}}
+{{/each}}
