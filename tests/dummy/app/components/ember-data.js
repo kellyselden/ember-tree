@@ -7,7 +7,8 @@ const {
   get,
   computed,
   computed: { readOnly },
-  RSVP: { all },
+  observer,
+  RSVP: { Promise, all },
   inject: { service },
   A: newArray
 } = Ember;
@@ -72,8 +73,6 @@ export default Component.extend({
   store: service(),
 
   user: computed(function() {
-    // reload true because if this is the first time tops are being loaded
-    // it early returns with an empty list
     return get(this, 'store').findRecord('user', 1);
   }),
 
@@ -97,8 +96,7 @@ export default Component.extend({
           return Ember.Object.extend({
             component,
             model: top,
-            user,
-            children: promiseArray('user.middles.[]', function() {
+            children: promiseArray('component.user.middles.[]', function() {
               let middles = get(top, 'middles');
               let myMiddles = getMyMiddles(user, top);
 
@@ -109,8 +107,7 @@ export default Component.extend({
                   return Ember.Object.extend({
                     component,
                     model: middle,
-                    user,
-                    children: promiseArray('user.bottoms.[]', function() {
+                    children: promiseArray('component.user.bottoms.[]', function() {
                       let bottoms = get(middle, 'bottoms');
                       let myBottoms = getMyBottoms(user, middle);
 
@@ -121,7 +118,6 @@ export default Component.extend({
                           return Ember.Object.extend({
                             component,
                             model: bottom,
-                            user,
                             myBottoms,
                             isSelected: getComputedIsSelected('myBottoms', bottomId),
                             isDisabled: readOnly('component.isDisabled'),
@@ -149,6 +145,26 @@ export default Component.extend({
         });
       });
     });
+  }),
+
+  couldntFigureOutHowToDoThisWithoutAnObserver: observer('shouldShowRadios', function() {
+    let shouldShowRadios = get(this, 'shouldShowRadios');
+
+    if (shouldShowRadios) {
+      return get(this, 'topModels').then(topModels => {
+        let selectedModels = topModels.filterBy('isSelected');
+
+        let modelsToDeselect = selectedModels.slice(1);
+        modelsToDeselect = newArray(modelsToDeselect);
+        modelsToDeselect = modelsToDeselect.mapBy('model');
+
+        let promises = modelsToDeselect.map(model => {
+          return this._toggleRelationship(false, model, 'tops', 'topToggles', 'middles', this._middleSelectionChanged);
+        });
+
+        return all(promises);
+      });
+    }
   }),
 
   topToggles: getComputedToggles(),
@@ -199,18 +215,28 @@ export default Component.extend({
       return this._toggleRelationship(isSelected, model, 'tops', 'topToggles', 'middles', this._middleSelectionChanged);
     };
 
-    // radio group functionality
+    let promise;
+
     if (get(this, 'shouldShowRadios')) {
-      get(this, 'tops').then(tops => {
-        return tops.map(top => {
-          return toggleRelationship(false, top);
+      promise = get(this, 'topModels').then(topModels => {
+        let selectedModels = topModels.filterBy('isSelected');
+
+        selectedModels = newArray(selectedModels);
+        selectedModels = selectedModels.mapBy('model');
+
+        let promises = selectedModels.map(model => {
+          return toggleRelationship(false, model);
         });
-      }).then(() => {
-        toggleRelationship(isSelected, model);
+
+        return all(promises);
       });
     } else {
-      toggleRelationship(isSelected, model);
+      promise = Promise.resolve();
     }
+
+    promise.then(() => {
+      toggleRelationship(isSelected, model);
+    });
   },
   _middleSelectionChanged(isSelected, model) {
     this._toggleRelationship(isSelected, model, 'middles', 'middleToggles', 'bottoms', this._bottomSelectionChanged);
