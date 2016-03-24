@@ -11,16 +11,18 @@
     {{/if}}
   </div>
 
-  <div class="input spacer">
-    {{one-way-input
-      type=type
-      checked=isSelectedReadOnly
-      disabled=isDisabled
-      update=(action "selectionChanged" model)
-    }}
-  </div>
+  <label>
+    <div class="input spacer">
+      {{one-way-input
+        type=type
+        checked=isSelectedReadOnly
+        disabled=isDisabled
+        update=(action "selectionChanged" model)
+      }}
+    </div>
 
-  <span class="text">{{text}}</span>
+    <span class="text">{{text}}</span>
+  </label>
 </div>
 
 {{#if isOpen}}

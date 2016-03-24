@@ -37,6 +37,16 @@ test('can unselect checkbox', function(assert) {
   assert.notOk(this.$('input').prop('checked'));
 });
 
+test('clicking text selects checkbox', function(assert) {
+  assert.expect(1);
+
+  renderDefault.call(this);
+
+  this.$('text').click();
+
+  assert.notOk(this.$('input').prop('checked'));
+});
+
 test('isSelected is true on first click', function(assert) {
   assert.expect(1);
 

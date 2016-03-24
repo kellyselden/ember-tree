@@ -1,5 +1,5 @@
 .tree-node {
-  .parent, .children, .loading {
+  .parent, label, .children, .loading {
     & > * {
       display: inline-block;
     }
