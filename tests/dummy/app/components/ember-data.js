@@ -13,9 +13,9 @@ const {
   A: newArray
 } = Ember;
 
-function getMyEntities(user, parent, childProperty) {
-  let children = get(parent, childProperty);
-  let userChildren = get(user, childProperty);
+function getMyEntities(user, parent, childrenProperty) {
+  let children = get(parent, childrenProperty);
+  let userChildren = get(user, childrenProperty);
 
   return all([children, userChildren]).then(([children, userChildren]) => {
     let parentName = parent.constructor.modelName;
@@ -39,14 +39,18 @@ function getMyBottoms(user, middle) {
   return getMyEntities(user, middle, 'bottoms');
 }
 
-function getComputedIsOpen(toggleProperty, id) {
-  return computed(`${toggleProperty}.[]`, 'isSelected', function() {
+function getComputedType() {
+  return conditional('component.shouldShowRadios', 'radio', 'checkbox');
+}
+
+function getComputedIsOpen(togglesProperty, id) {
+  return computed(`${togglesProperty}.[]`, 'isSelected', function() {
     let isSelected = get(this, 'isSelected');
     if (!isSelected) {
       return false;
     }
 
-    let toggles = get(this, toggleProperty);
+    let toggles = get(this, togglesProperty);
     let isOpen = toggles.contains(id);
 
     return isOpen;
@@ -67,6 +71,10 @@ function getComputedToggles() {
   return computed('user', function() {
     return newArray();
   });
+}
+
+function getComputedIsDisabled() {
+  return readOnly('component.isDisabled');
 }
 
 export default Component.extend({
@@ -118,28 +126,30 @@ export default Component.extend({
                           return Ember.Object.extend({
                             component,
                             model: bottom,
+                            type: getComputedType(),
                             myBottoms,
                             isSelected: getComputedIsSelected('myBottoms', bottomId),
-                            isDisabled: readOnly('component.isDisabled'),
+                            isDisabled: getComputedIsDisabled(),
                             shouldShowToggle: false
                           }).create();
                         });
                       });
                     }),
+                    type: getComputedType(),
                     isOpen: getComputedIsOpen('component.middleToggles', middleId),
                     myMiddles,
                     isSelected: getComputedIsSelected('myMiddles', middleId),
-                    isDisabled: readOnly('component.isDisabled'),
+                    isDisabled: getComputedIsDisabled(),
                     shouldShowToggle: readOnly('isSelected')
                   }).create();
                 });
               });
             }),
-            type: conditional('component.shouldShowRadios', 'radio', 'checkbox'),
+            type: getComputedType(),
             isOpen: getComputedIsOpen('component.topToggles', topId),
             myTops,
             isSelected: getComputedIsSelected('myTops', topId),
-            isDisabled: readOnly('component.isDisabled'),
+            isDisabled: getComputedIsDisabled(),
             shouldShowToggle: readOnly('isSelected')
           }).create();
         });
@@ -147,31 +157,39 @@ export default Component.extend({
     });
   }),
 
+  _removeAllButFirst(modelsProperty, entitiesProperty, togglesProperty, childrenProperty, childenFunc) {
+    return get(this, modelsProperty).then(models => {
+      let selectedModels = models.filterBy('isSelected');
+
+      let modelsToDeselect = selectedModels.slice(1);
+      modelsToDeselect = newArray(modelsToDeselect);
+      modelsToDeselect = modelsToDeselect.mapBy('model');
+
+      let promises = modelsToDeselect.map(model => {
+        return this._toggleRelationship(false, model, entitiesProperty, togglesProperty, childrenProperty, childenFunc);
+      });
+
+      return all(promises);
+    });
+  },
+
   couldntFigureOutHowToDoThisWithoutAnObserver: observer('shouldShowRadios', function() {
     let shouldShowRadios = get(this, 'shouldShowRadios');
 
     if (shouldShowRadios) {
-      return get(this, 'topModels').then(topModels => {
-        let selectedModels = topModels.filterBy('isSelected');
-
-        let modelsToDeselect = selectedModels.slice(1);
-        modelsToDeselect = newArray(modelsToDeselect);
-        modelsToDeselect = modelsToDeselect.mapBy('model');
-
-        let promises = modelsToDeselect.map(model => {
-          return this._toggleRelationship(false, model, 'tops', 'topToggles', 'middles', this._middleSelectionChanged);
-        });
-
-        return all(promises);
-      });
+      return all(
+        this._removeAllButFirst('topModels', 'tops', 'topToggles', 'middles', this._middleSelectionChanged),
+        this._removeAllButFirst('middleModels', 'middles', 'middleToggles', 'bottoms', this._bottomSelectionChanged),
+        this._removeAllButFirst('topModels', 'bottoms')
+      );
     }
   }),
 
   topToggles: getComputedToggles(),
   middleToggles: getComputedToggles(),
 
-  _toggleOpen(isOpen, entity, toggleProperty) {
-    let toggles = get(this, toggleProperty);
+  _toggleOpen(isOpen, entity, togglesProperty) {
+    let toggles = get(this, togglesProperty);
     let id = get(entity, 'id');
 
     if (isOpen) {
@@ -181,22 +199,22 @@ export default Component.extend({
     }
   },
 
-  _removeAll(parent, childProperty, childFunc) {
+  _removeAll(parent, childrenProperty, childenFunc) {
     let user = get(this, 'user');
-    let myEntities = getMyEntities(user, parent, childProperty);
+    let myEntities = getMyEntities(user, parent, childrenProperty);
 
     myEntities.then(myEntities => {
       myEntities.toArray().forEach(entity => {
-        childFunc.call(this, false, entity);
+        childenFunc.call(this, false, entity);
       });
     });
   },
 
-  _toggleRelationship(isSelected, entity, entitiesProperty, toggleProperty, childProperty, childFunc) {
+  _toggleRelationship(isSelected, entity, entitiesProperty, togglesProperty, childrenProperty, childenFunc) {
     let entities = get(this, `user.${entitiesProperty}`);
 
-    if (childProperty && !isSelected) {
-      this._removeAll(entity, childProperty, childFunc);
+    if (childrenProperty && !isSelected) {
+      this._removeAll(entity, childrenProperty, childenFunc);
     }
 
     return entities.then(entities => {
@@ -205,21 +223,21 @@ export default Component.extend({
       } else {
         entities.removeObject(entity);
 
-        this._toggleOpen(false, entity, toggleProperty);
+        this._toggleOpen(false, entity, togglesProperty);
       }
     });
   },
 
-  _topSelectionChanged(isSelected, model) {
+  _selectionChanged(isSelected, model, modelsProperty, entitiesProperty, togglesProperty, childrenProperty, childenFunc) {
     let toggleRelationship = (isSelected, model) => {
-      return this._toggleRelationship(isSelected, model, 'tops', 'topToggles', 'middles', this._middleSelectionChanged);
+      return this._toggleRelationship(isSelected, model, entitiesProperty, togglesProperty, childrenProperty, childenFunc);
     };
 
     let promise;
 
     if (get(this, 'shouldShowRadios')) {
-      promise = get(this, 'topModels').then(topModels => {
-        let selectedModels = topModels.filterBy('isSelected');
+      promise = get(this, modelsProperty).then(models => {
+        let selectedModels = models.filterBy('isSelected');
 
         selectedModels = newArray(selectedModels);
         selectedModels = selectedModels.mapBy('model');
@@ -238,11 +256,15 @@ export default Component.extend({
       toggleRelationship(isSelected, model);
     });
   },
+
+  _topSelectionChanged(isSelected, model) {
+    this._selectionChanged(isSelected, model, 'topModels', 'tops', 'topToggles', 'middles', this._middleSelectionChanged);
+  },
   _middleSelectionChanged(isSelected, model) {
-    this._toggleRelationship(isSelected, model, 'middles', 'middleToggles', 'bottoms', this._bottomSelectionChanged);
+    this._selectionChanged(isSelected, model, 'middleModels', 'middles', 'middleToggles', 'bottoms', this._bottomSelectionChanged);
   },
   _bottomSelectionChanged(isSelected, model) {
-    this._toggleRelationship(isSelected, model, 'bottoms');
+    this._selectionChanged(isSelected, model, 'bottomModels', 'bottoms');
   },
 
   actions: {
