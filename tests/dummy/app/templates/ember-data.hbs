@@ -1,9 +1,26 @@
-{{one-way-checkbox
-  shouldShowRadios
-  update=(action (mut shouldShowRadios))
-}}
-Show radio buttons at top level
+<div>
+  {{one-way-checkbox
+    shouldShowRadios
+    id="shouldShowRadios"
+    update=(action (mut shouldShowRadios))
+  }}
+  <label for="shouldShowRadios">
+    Show radio buttons at top level
+  </label>
+</div>
+
+<div>
+  {{one-way-checkbox
+    shouldDisableTree
+    id="shouldDisableTree"
+    update=(action (mut shouldDisableTree))
+  }}
+  <label for="shouldDisableTree">
+    Disable entire tree
+  </label>
+</div>
 
 {{ember-data
   shouldShowRadios=shouldShowRadios
+  isDisabled=shouldDisableTree
 }}
