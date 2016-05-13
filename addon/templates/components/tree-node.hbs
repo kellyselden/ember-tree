@@ -13,8 +13,8 @@
 
   <label>
     <div class="input spacer">
-      {{one-way-input
-        type=type
+      {{component
+        (concat "one-way-" type)
         checked=isSelectedReadOnly
         disabled=isDisabled
         update=(action "selectionChanged" model)
