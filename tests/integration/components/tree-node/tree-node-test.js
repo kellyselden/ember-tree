@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import { init, globals, renderDefault } from './tree-node';
+import { init, globals, renderDefault } from '../../../helpers/tree-node';
 
 const {
   set
