@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import conditional from 'ember-cpm/macros/conditional';
-import promiseArray from 'ember-awesome-macros/promise-array';
+import { promiseArray } from 'ember-awesome-macros';
 
 const {
   Component,

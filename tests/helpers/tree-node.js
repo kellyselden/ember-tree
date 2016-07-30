@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { moduleForComponent } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import promiseArray from 'ember-awesome-macros/promise-array';
+import { promiseArray } from 'ember-awesome-macros';
 
 const {
   set, setProperties,

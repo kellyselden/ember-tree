@@ -2,7 +2,7 @@ import Ember from 'ember';
 import layout from '../templates/components/tree-node';
 import conditional from 'ember-cpm/macros/conditional';
 import ifNull from 'ember-cpm/macros/if-null';
-import defaultTrue from 'ember-awesome-macros/default-true';
+import { defaultTrue } from 'ember-awesome-macros';
 
 const {
   Component,
