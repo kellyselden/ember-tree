@@ -39,7 +39,7 @@ test('shows custom loading text', function(assert) {
   assert.strictEqual(this.$('.loading').text().trim(), 'test-loading');
 });
 
-test('does\'t send action when started open', function(assert) {
+test('doesn\'t send action when started open', function(assert) {
   assert.expect(1);
 
   let done = assert.async();
