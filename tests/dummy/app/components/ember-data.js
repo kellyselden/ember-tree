@@ -1,6 +1,9 @@
 import Ember from 'ember';
-import conditional from 'ember-cpm/macros/conditional';
-import { promiseArray } from 'ember-awesome-macros';
+import {
+  conditional,
+  promiseArray,
+  raw
+} from 'ember-awesome-macros';
 
 const {
   Component,
@@ -135,7 +138,7 @@ export default Component.extend({
                 });
               });
             }),
-            type: conditional('component.shouldShowRadios', 'radio', 'checkbox'),
+            type: conditional('component.shouldShowRadios', raw('radio'), raw('checkbox')),
             isOpen: getComputedIsOpen('component.topToggles', topId),
             myTops,
             isSelected: getComputedIsSelected('myTops', topId),
