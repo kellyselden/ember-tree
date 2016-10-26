@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import layout from '../templates/components/tree-node';
-import ifNull from 'ember-cpm/macros/if-null';
 import {
   conditional,
   defaultTrue,
+  or,
   raw
 } from 'ember-awesome-macros';
 
@@ -18,13 +18,12 @@ const MyComponent = Component.extend({
 
   classNames: ['tree-node'],
 
-  _defaultLoadingText: 'loading...',
-  _loadingText: ifNull('loadingText', '_defaultLoadingText'),
+  _loadingText: or('loadingText', raw('loading...')),
 
   toggleClass: conditional('isOpen', raw('open'), raw('closed')),
 
   children:            readOnly('model.children'),
-  type:                  ifNull('model.type', 'checkbox'),
+  type:                      or('model.type', raw('checkbox')),
   isOpen:                 alias('model.isOpen'),
   isSelected:             alias('model.isSelected'),
   isDisabled:          readOnly('model.isDisabled'),
