@@ -85,7 +85,7 @@ export default Component.extend({
     return get(this, 'store').findAll('top', { reload: true });
   }),
 
-  topModels: promiseArray('user.tops.[]', function() {
+  topModels: promiseArray(computed('user.tops.[]', function() {
     let component = this;
 
     return get(this, 'user').then(user => {
@@ -99,7 +99,7 @@ export default Component.extend({
           return Ember.Object.extend({
             component,
             model: top,
-            children: promiseArray('component.user.middles.[]', function() {
+            children: promiseArray(computed('component.user.middles.[]', function() {
               let middles = get(top, 'middles');
               let myMiddles = getMyMiddles(user, top);
 
@@ -110,7 +110,7 @@ export default Component.extend({
                   return Ember.Object.extend({
                     component,
                     model: middle,
-                    children: promiseArray('component.user.bottoms.[]', function() {
+                    children: promiseArray(computed('component.user.bottoms.[]', function() {
                       let bottoms = get(middle, 'bottoms');
                       let myBottoms = getMyBottoms(user, middle);
 
@@ -128,7 +128,7 @@ export default Component.extend({
                           }).create();
                         });
                       });
-                    }),
+                    })),
                     isOpen: getComputedIsOpen('component.middleToggles', middleId),
                     myMiddles,
                     isSelected: getComputedIsSelected('myMiddles', middleId),
@@ -137,7 +137,7 @@ export default Component.extend({
                   }).create();
                 });
               });
-            }),
+            })),
             type: conditional('component.shouldShowRadios', raw('radio'), raw('checkbox')),
             isOpen: getComputedIsOpen('component.topToggles', topId),
             myTops,
@@ -148,7 +148,7 @@ export default Component.extend({
         });
       });
     });
-  }),
+  })),
 
   couldntFigureOutHowToDoThisWithoutAnObserver: observer('shouldShowRadios', function() {
     let shouldShowRadios = get(this, 'shouldShowRadios');
