@@ -6,7 +6,8 @@ import { promiseArray } from 'ember-awesome-macros';
 const {
   set, setProperties,
   RSVP: { defer },
-  A: newArray
+  A: newArray,
+  computed
 } = Ember;
 
 const globals = {};
@@ -26,10 +27,10 @@ function init() {
 
       this.set('model', Ember.Object.extend({
         text: 'test-text',
-        children: promiseArray(function() {
+        children: promiseArray(computed(function() {
           globals.wasToggleChangedCalled = true;
           return deferred.promise;
-        })
+        }))
       }).create());
       this.set('loadingText', 'test-loading');
 
