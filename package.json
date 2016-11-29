@@ -50,7 +50,7 @@
     "ember-array-helper": "1.0.0",
     "ember-awesome-macros": "0.24.0",
     "ember-cli-babel": "^5.1.7",
-    "ember-cli-htmlbars": "^1.0.10",
+    "ember-cli-htmlbars": "^1.1.1",
     "ember-cli-sass": "^5.0.0",
     "ember-one-way-controls": "^1.0.0"
   },
