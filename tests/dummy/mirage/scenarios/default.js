@@ -9,7 +9,7 @@ export default function(server) {
     Make sure to define a factory for each model you want to create.
   */
 
-  let users = [server.create('user')];
+  let users = server.createList('user', 1);
   let tops = server.createList('top', numberOfSiblings);
   tops[0].update('users', users);
 
