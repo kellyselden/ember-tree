@@ -21,7 +21,7 @@ export default function() {
     this.put('/posts/:id'); // or this.patch
     this.del('/posts/:id');
 
-    http://www.ember-cli-mirage.com/docs/v0.2.0-beta.7/shorthands/
+    http://www.ember-cli-mirage.com/docs/v0.2.x/shorthands/
   */
 
   this.get('/users/:id');
