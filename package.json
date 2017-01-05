@@ -25,7 +25,7 @@
     "ember-awesome-macros": "0.27.0",
     "ember-cli-babel": "^5.1.7",
     "ember-cli-htmlbars": "^1.0.10",
-    "ember-cli-sass": "^5.0.0",
+    "ember-cli-sass": "^6.0.0",
     "ember-one-way-controls": "^2.0.0"
   },
   "devDependencies": {
