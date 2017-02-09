@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { moduleForComponent } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import { promise } from 'ember-awesome-macros';
+import { array as promiseArray } from 'ember-awesome-macros/promise';
 
 const {
   set, setProperties,
@@ -27,7 +27,7 @@ function init() {
 
       this.set('model', Ember.Object.extend({
         text: 'test-text',
-        children: promise.array(computed(function() {
+        children: promiseArray(computed(function() {
           globals.wasToggleChangedCalled = true;
           return deferred.promise;
         }))

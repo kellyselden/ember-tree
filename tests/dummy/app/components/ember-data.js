@@ -1,9 +1,7 @@
 import Ember from 'ember';
 import raw from 'ember-macro-helpers/raw';
-import {
-  conditional,
-  promise
-} from 'ember-awesome-macros';
+import { conditional } from 'ember-awesome-macros';
+import { array as promiseArray } from 'ember-awesome-macros/promise';
 
 const {
   Component,
@@ -85,7 +83,7 @@ export default Component.extend({
     return get(this, 'store').findAll('top', { reload: true });
   }),
 
-  topModels: promise.array(computed('user.tops.[]', function() {
+  topModels: promiseArray(computed('user.tops.[]', function() {
     let component = this;
 
     return get(this, 'user').then(user => {
@@ -99,7 +97,7 @@ export default Component.extend({
           return Ember.Object.extend({
             component,
             model: top,
-            children: promise.array(computed('component.user.middles.[]', function() {
+            children: promiseArray(computed('component.user.middles.[]', function() {
               let middles = get(top, 'middles');
               let myMiddles = getMyMiddles(user, top);
 
@@ -110,7 +108,7 @@ export default Component.extend({
                   return Ember.Object.extend({
                     component,
                     model: middle,
-                    children: promise.array(computed('component.user.bottoms.[]', function() {
+                    children: promiseArray(computed('component.user.bottoms.[]', function() {
                       let bottoms = get(middle, 'bottoms');
                       let myBottoms = getMyBottoms(user, middle);
 
