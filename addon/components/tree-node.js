@@ -1,10 +1,10 @@
 import Ember from 'ember';
 import layout from '../templates/components/tree-node';
+import raw from 'ember-macro-helpers/raw';
 import {
   conditional,
   defaultTrue,
-  or,
-  raw
+  or
 } from 'ember-awesome-macros';
 
 const {
