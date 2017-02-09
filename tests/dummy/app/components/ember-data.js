@@ -13,7 +13,7 @@ const {
   observer,
   RSVP: { Promise, all },
   inject: { service },
-  A: newArray
+  A: emberA
 } = Ember;
 
 function getMyEntities(user, parent, childProperty) {
@@ -68,7 +68,7 @@ function getComputedIsSelected(myChildrenProperty, childId) {
 
 function getComputedToggles() {
   return computed('user', function() {
-    return newArray();
+    return emberA();
   });
 }
 
@@ -158,7 +158,7 @@ export default Component.extend({
         let selectedModels = topModels.filterBy('isSelected');
 
         let modelsToDeselect = selectedModels.slice(1);
-        modelsToDeselect = newArray(modelsToDeselect);
+        modelsToDeselect = emberA(modelsToDeselect);
         modelsToDeselect = modelsToDeselect.mapBy('model');
 
         let promises = modelsToDeselect.map(model => {
@@ -224,7 +224,7 @@ export default Component.extend({
       promise = get(this, 'topModels').then(topModels => {
         let selectedModels = topModels.filterBy('isSelected');
 
-        selectedModels = newArray(selectedModels);
+        selectedModels = emberA(selectedModels);
         selectedModels = selectedModels.mapBy('model');
 
         let promises = selectedModels.map(model => {
