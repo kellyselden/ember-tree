@@ -6,7 +6,7 @@ import { promise } from 'ember-awesome-macros';
 const {
   set, setProperties,
   RSVP: { defer },
-  A: newArray,
+  A: emberA,
   computed
 } = Ember;
 
@@ -73,6 +73,6 @@ export function renderDefault(shouldResolve = true) {
   `);
 
   if (shouldResolve) {
-    deferred.resolve(newArray(['test-child']));
+    deferred.resolve(emberA(['test-child']));
   }
 }
