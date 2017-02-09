@@ -1,8 +1,8 @@
 import Ember from 'ember';
+import raw from 'ember-macro-helpers/raw';
 import {
   conditional,
-  promise,
-  raw
+  promise
 } from 'ember-awesome-macros';
 
 const {
