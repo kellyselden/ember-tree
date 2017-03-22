@@ -18,7 +18,7 @@ function getMyEntities(user, parent, childProperty) {
   let children = get(parent, childProperty);
   let userChildren = get(user, childProperty);
 
-  return all([children, userChildren]).then(([children, userChildren]) => {
+  return all([children, userChildren]).then(([, userChildren]) => {
     let parentName = parent.constructor.modelName;
     let parentId = get(parent, 'id');
 
