@@ -1,5 +1,6 @@
 # ember-tree
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kellyselden/ember-tree.svg)](https://greenkeeper.io/)
 [![npm version](https://badge.fury.io/js/ember-tree.svg)](https://badge.fury.io/js/ember-tree)
 [![Build Status](https://travis-ci.org/kellyselden/ember-tree.svg?branch=master)](https://travis-ci.org/kellyselden/ember-tree)
 ![Ember Version](https://embadge.io/v1/badge.svg?start=1.13.0)
