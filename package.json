@@ -6,7 +6,7 @@
     "ember-addon"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Kelly Selden",
   "directories": {
     "doc": "doc",
     "test": "tests"
