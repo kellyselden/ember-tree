@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "ember-array-helper": "^2.0.0",
-    "ember-awesome-macros": "^0.34.0",
+    "ember-awesome-macros": "^0.35.0",
     "ember-cli-babel": "^6.0.0",
     "ember-cli-htmlbars": "^1.1.1",
     "ember-cli-sass": "^6.1.2",
