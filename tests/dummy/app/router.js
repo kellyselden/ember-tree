@@ -7,7 +7,7 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('ember-data', { resetNamespace: true });
+  this.route('ember-data');
 });
 
 export default Router;
