@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { set } from '@ember/object';
 import { test } from 'ember-qunit';
 import { init, renderDefault } from '../../../helpers/tree-node';
-
-const {
-  set
-} = Ember;
 
 init();
 

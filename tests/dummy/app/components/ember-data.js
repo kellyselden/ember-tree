@@ -1,18 +1,16 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { readOnly } from '@ember/object/computed';
+import EmberObject, {
+  observer,
+  computed,
+  get
+} from '@ember/object';
+import { all, Promise } from 'rsvp';
+import { inject as service } from '@ember/service';
+import { A as emberA } from '@ember/array';
 import raw from 'ember-macro-helpers/raw';
 import { conditional } from 'ember-awesome-macros';
 import { array as promiseArray } from 'ember-awesome-macros/promise';
-
-const {
-  Component,
-  get,
-  computed,
-  computed: { readOnly },
-  observer,
-  RSVP: { Promise, all },
-  inject: { service },
-  A: emberA
-} = Ember;
 
 function getMyEntities(user, parent, childProperty) {
   let children = get(parent, childProperty);
@@ -94,7 +92,7 @@ export default Component.extend({
         return tops.map(top => {
           let topId = get(top, 'id');
 
-          return Ember.Object.extend({
+          return EmberObject.extend({
             component,
             model: top,
             children: promiseArray(computed('component.user.middles.[]', function() {
@@ -105,7 +103,7 @@ export default Component.extend({
                 return middles.map(middle => {
                   let middleId = get(middle, 'id');
 
-                  return Ember.Object.extend({
+                  return EmberObject.extend({
                     component,
                     model: middle,
                     children: promiseArray(computed('component.user.bottoms.[]', function() {
@@ -116,7 +114,7 @@ export default Component.extend({
                         return bottoms.map(bottom => {
                           let bottomId = get(bottom, 'id');
 
-                          return Ember.Object.extend({
+                          return EmberObject.extend({
                             component,
                             model: bottom,
                             myBottoms,
