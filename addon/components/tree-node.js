@@ -1,4 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { set, get } from '@ember/object';
+import { alias, readOnly } from '@ember/object/computed';
 import layout from '../templates/components/tree-node';
 import raw from 'ember-macro-helpers/raw';
 import {
@@ -6,12 +8,6 @@ import {
   defaultTrue,
   or
 } from 'ember-awesome-macros';
-
-const {
-  Component,
-  get, set,
-  computed: { readOnly, alias }
-} = Ember;
 
 const MyComponent = Component.extend({
   layout,

@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { set } from '@ember/object';
 import { test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { init, globals, renderDefault } from '../../../helpers/tree-node';
-
-const {
-  set
-} = Ember;
 
 init();
 

@@ -1,14 +1,13 @@
-import Ember from 'ember';
+import { defer } from 'rsvp';
+import { A as emberA } from '@ember/array';
+import EmberObject, {
+  computed,
+  setProperties,
+  set
+} from '@ember/object';
 import { moduleForComponent } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { array as promiseArray } from 'ember-awesome-macros/promise';
-
-const {
-  set, setProperties,
-  RSVP: { defer },
-  A: emberA,
-  computed
-} = Ember;
 
 const globals = {};
 
@@ -25,7 +24,7 @@ function init() {
         wasSelectionChangedCalled: false
       });
 
-      this.set('model', Ember.Object.extend({
+      this.set('model', EmberObject.extend({
         text: 'test-text',
         children: promiseArray(computed(function() {
           globals.wasToggleChangedCalled = true;
