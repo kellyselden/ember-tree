@@ -55,5 +55,10 @@
   "ember-addon": {
     "configPath": "tests/dummy/config",
     "demoURL": "https://kellyselden.github.io/ember-tree"
+  },
+  "greenkeeper": {
+    "ignore": [
+      "ember-one-way-controls"
+    ]
   }
 }
