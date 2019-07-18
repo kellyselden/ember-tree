@@ -27,7 +27,7 @@
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-sass": "^7.0.0",
     "ember-macro-helpers": "^0.17.0",
-    "ember-one-way-controls": "2.0.0"
+    "ember-one-way-controls": "^3.0.0"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
@@ -55,10 +55,5 @@
   "ember-addon": {
     "configPath": "tests/dummy/config",
     "demoURL": "https://kellyselden.github.io/ember-tree"
-  },
-  "greenkeeper": {
-    "ignore": [
-      "ember-one-way-controls"
-    ]
   }
 }
