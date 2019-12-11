@@ -24,7 +24,7 @@
     "ember-array-helper": "^3.0.0",
     "ember-awesome-macros": "^0.40.0",
     "ember-cli-babel": "^6.6.0",
-    "ember-cli-htmlbars": "^2.0.1",
+    "ember-cli-htmlbars": "^4.2.0",
     "ember-cli-sass": "^7.0.0",
     "ember-macro-helpers": "^0.17.0",
     "ember-one-way-controls": "2.0.0"
